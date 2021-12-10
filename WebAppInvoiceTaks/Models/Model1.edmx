@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="invoiceDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblCustomers">
+          <Key>
+            <PropertyRef Name="customerId" />
+          </Key>
+          <Property Name="customerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerName" Type="varchar" MaxLength="100" />
+          <Property Name="address" Type="varchar" MaxLength="100" />
+          <Property Name="email" Type="varchar" MaxLength="20" />
+          <Property Name="mobile" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblInviocePayments">
+          <Key>
+            <PropertyRef Name="paymentId" />
+          </Key>
+          <Property Name="paymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="invoiceId" Type="int" />
+          <Property Name="invoicePayment" Type="date" />
+          <Property Name="amount" Type="int" />
+          <Property Name="paymentMode" Type="varchar" MaxLength="100" />
+          <Property Name="description" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="tblInvoiceDetails">
+          <Key>
+            <PropertyRef Name="invoiceId" />
+          </Key>
+          <Property Name="invoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerId" Type="int" />
+          <Property Name="invoiceDate" Type="date" />
+          <Property Name="totalAmount" Type="int" />
+          <Property Name="status" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tblInvoiceItems">
+          <Key>
+            <PropertyRef Name="invoiceItemId" />
+          </Key>
+          <Property Name="invoiceItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="invoiceId" Type="int" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="itemId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblItems">
+          <Key>
+            <PropertyRef Name="itemId" />
+          </Key>
+          <Property Name="itemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="itemName" Type="varchar" MaxLength="100" />
+          <Property Name="itemRate" Type="float" />
+          <Property Name="itemTax" Type="int" />
+        </EntityType>
+        <Association Name="fkcidm">
+          <End Role="tblCustomers" Type="Self.tblCustomers" Multiplicity="0..1" />
+          <End Role="tblInvoiceDetails" Type="Self.tblInvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomers">
+              <PropertyRef Name="customerId" />
+            </Principal>
+            <Dependent Role="tblInvoiceDetails">
+              <PropertyRef Name="customerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkidk">
+          <End Role="tblInvoiceDetails" Type="Self.tblInvoiceDetails" Multiplicity="0..1" />
+          <End Role="tblInviocePayments" Type="Self.tblInviocePayments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblInvoiceDetails">
+              <PropertyRef Name="invoiceId" />
+            </Principal>
+            <Dependent Role="tblInviocePayments">
+              <PropertyRef Name="invoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkitd">
+          <End Role="tblInvoiceDetails" Type="Self.tblInvoiceDetails" Multiplicity="0..1" />
+          <End Role="tblInvoiceItems" Type="Self.tblInvoiceItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblInvoiceDetails">
+              <PropertyRef Name="invoiceId" />
+            </Principal>
+            <Dependent Role="tblInvoiceItems">
+              <PropertyRef Name="invoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkitemid">
+          <End Role="tblItems" Type="Self.tblItems" Multiplicity="0..1" />
+          <End Role="tblInvoiceItems" Type="Self.tblInvoiceItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItems">
+              <PropertyRef Name="itemId" />
+            </Principal>
+            <Dependent Role="tblInvoiceItems">
+              <PropertyRef Name="itemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="invoiceDBModelStoreContainer">
+          <EntitySet Name="tblCustomers" EntityType="Self.tblCustomers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblInviocePayments" EntityType="Self.tblInviocePayments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblInvoiceDetails" EntityType="Self.tblInvoiceDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblInvoiceItems" EntityType="Self.tblInvoiceItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblItems" EntityType="Self.tblItems" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fkcidm" Association="Self.fkcidm">
+            <End Role="tblCustomers" EntitySet="tblCustomers" />
+            <End Role="tblInvoiceDetails" EntitySet="tblInvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fkidk" Association="Self.fkidk">
+            <End Role="tblInvoiceDetails" EntitySet="tblInvoiceDetails" />
+            <End Role="tblInviocePayments" EntitySet="tblInviocePayments" />
+          </AssociationSet>
+          <AssociationSet Name="fkitd" Association="Self.fkitd">
+            <End Role="tblInvoiceDetails" EntitySet="tblInvoiceDetails" />
+            <End Role="tblInvoiceItems" EntitySet="tblInvoiceItems" />
+          </AssociationSet>
+          <AssociationSet Name="fkitemid" Association="Self.fkitemid">
+            <End Role="tblItems" EntitySet="tblItems" />
+            <End Role="tblInvoiceItems" EntitySet="tblInvoiceItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="invoiceDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="invoiceDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblCustomers" EntityType="invoiceDBModel.tblCustomer" />
+          <EntitySet Name="tblInviocePayments" EntityType="invoiceDBModel.tblInviocePayment" />
+          <EntitySet Name="tblInvoiceDetails" EntityType="invoiceDBModel.tblInvoiceDetail" />
+          <EntitySet Name="tblInvoiceItems" EntityType="invoiceDBModel.tblInvoiceItem" />
+          <EntitySet Name="tblItems" EntityType="invoiceDBModel.tblItem" />
+          <AssociationSet Name="fkcidm" Association="invoiceDBModel.fkcidm">
+            <End Role="tblCustomer" EntitySet="tblCustomers" />
+            <End Role="tblInvoiceDetail" EntitySet="tblInvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fkidk" Association="invoiceDBModel.fkidk">
+            <End Role="tblInvoiceDetail" EntitySet="tblInvoiceDetails" />
+            <End Role="tblInviocePayment" EntitySet="tblInviocePayments" />
+          </AssociationSet>
+          <AssociationSet Name="fkitd" Association="invoiceDBModel.fkitd">
+            <End Role="tblInvoiceDetail" EntitySet="tblInvoiceDetails" />
+            <End Role="tblInvoiceItem" EntitySet="tblInvoiceItems" />
+          </AssociationSet>
+          <AssociationSet Name="fkitemid" Association="invoiceDBModel.fkitemid">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="tblInvoiceItem" EntitySet="tblInvoiceItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="customerId" />
+          </Key>
+          <Property Name="customerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblInvoiceDetails" Relationship="invoiceDBModel.fkcidm" FromRole="tblCustomer" ToRole="tblInvoiceDetail" />
+        </EntityType>
+        <EntityType Name="tblInviocePayment">
+          <Key>
+            <PropertyRef Name="paymentId" />
+          </Key>
+          <Property Name="paymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="invoiceId" Type="Int32" />
+          <Property Name="invoicePayment" Type="DateTime" Precision="0" />
+          <Property Name="amount" Type="Int32" />
+          <Property Name="paymentMode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblInvoiceDetail" Relationship="invoiceDBModel.fkidk" FromRole="tblInviocePayment" ToRole="tblInvoiceDetail" />
+        </EntityType>
+        <EntityType Name="tblInvoiceDetail">
+          <Key>
+            <PropertyRef Name="invoiceId" />
+          </Key>
+          <Property Name="invoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerId" Type="Int32" />
+          <Property Name="invoiceDate" Type="DateTime" Precision="0" />
+          <Property Name="totalAmount" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblCustomer" Relationship="invoiceDBModel.fkcidm" FromRole="tblInvoiceDetail" ToRole="tblCustomer" />
+          <NavigationProperty Name="tblInviocePayments" Relationship="invoiceDBModel.fkidk" FromRole="tblInvoiceDetail" ToRole="tblInviocePayment" />
+          <NavigationProperty Name="tblInvoiceItems" Relationship="invoiceDBModel.fkitd" FromRole="tblInvoiceDetail" ToRole="tblInvoiceItem" />
+        </EntityType>
+        <EntityType Name="tblInvoiceItem">
+          <Key>
+            <PropertyRef Name="invoiceItemId" />
+          </Key>
+          <Property Name="invoiceItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="invoiceId" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="itemId" Type="Int32" />
+          <NavigationProperty Name="tblInvoiceDetail" Relationship="invoiceDBModel.fkitd" FromRole="tblInvoiceItem" ToRole="tblInvoiceDetail" />
+          <NavigationProperty Name="tblItem" Relationship="invoiceDBModel.fkitemid" FromRole="tblInvoiceItem" ToRole="tblItem" />
+        </EntityType>
+        <EntityType Name="tblItem">
+          <Key>
+            <PropertyRef Name="itemId" />
+          </Key>
+          <Property Name="itemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="itemRate" Type="Double" />
+          <Property Name="itemTax" Type="Int32" />
+          <NavigationProperty Name="tblInvoiceItems" Relationship="invoiceDBModel.fkitemid" FromRole="tblItem" ToRole="tblInvoiceItem" />
+        </EntityType>
+        <Association Name="fkcidm">
+          <End Type="invoiceDBModel.tblCustomer" Role="tblCustomer" Multiplicity="0..1" />
+          <End Type="invoiceDBModel.tblInvoiceDetail" Role="tblInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomer">
+              <PropertyRef Name="customerId" />
+            </Principal>
+            <Dependent Role="tblInvoiceDetail">
+              <PropertyRef Name="customerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkidk">
+          <End Type="invoiceDBModel.tblInvoiceDetail" Role="tblInvoiceDetail" Multiplicity="0..1" />
+          <End Type="invoiceDBModel.tblInviocePayment" Role="tblInviocePayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblInvoiceDetail">
+              <PropertyRef Name="invoiceId" />
+            </Principal>
+            <Dependent Role="tblInviocePayment">
+              <PropertyRef Name="invoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkitd">
+          <End Type="invoiceDBModel.tblInvoiceDetail" Role="tblInvoiceDetail" Multiplicity="0..1" />
+          <End Type="invoiceDBModel.tblInvoiceItem" Role="tblInvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblInvoiceDetail">
+              <PropertyRef Name="invoiceId" />
+            </Principal>
+            <Dependent Role="tblInvoiceItem">
+              <PropertyRef Name="invoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkitemid">
+          <End Type="invoiceDBModel.tblItem" Role="tblItem" Multiplicity="0..1" />
+          <End Type="invoiceDBModel.tblInvoiceItem" Role="tblInvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="itemId" />
+            </Principal>
+            <Dependent Role="tblInvoiceItem">
+              <PropertyRef Name="itemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="invoiceDBModelStoreContainer" CdmEntityContainer="invoiceDBEntities">
+          <EntitySetMapping Name="tblCustomers">
+            <EntityTypeMapping TypeName="invoiceDBModel.tblCustomer">
+              <MappingFragment StoreEntitySet="tblCustomers">
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="customerName" ColumnName="customerName" />
+                <ScalarProperty Name="customerId" ColumnName="customerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInviocePayments">
+            <EntityTypeMapping TypeName="invoiceDBModel.tblInviocePayment">
+              <MappingFragment StoreEntitySet="tblInviocePayments">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="paymentMode" ColumnName="paymentMode" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="invoicePayment" ColumnName="invoicePayment" />
+                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+                <ScalarProperty Name="paymentId" ColumnName="paymentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInvoiceDetails">
+            <EntityTypeMapping TypeName="invoiceDBModel.tblInvoiceDetail">
+              <MappingFragment StoreEntitySet="tblInvoiceDetails">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="invoiceDate" ColumnName="invoiceDate" />
+                <ScalarProperty Name="customerId" ColumnName="customerId" />
+                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInvoiceItems">
+            <EntityTypeMapping TypeName="invoiceDBModel.tblInvoiceItem">
+              <MappingFragment StoreEntitySet="tblInvoiceItems">
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+                <ScalarProperty Name="invoiceItemId" ColumnName="invoiceItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblItems">
+            <EntityTypeMapping TypeName="invoiceDBModel.tblItem">
+              <MappingFragment StoreEntitySet="tblItems">
+                <ScalarProperty Name="itemTax" ColumnName="itemTax" />
+                <ScalarProperty Name="itemRate" ColumnName="itemRate" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
